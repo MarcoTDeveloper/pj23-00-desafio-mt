@@ -35,6 +35,8 @@ BEGIN
     INSERT INTO `users_permissions` (`user_id`, `permission`) VALUES (NEW.id, 'orders.read');
     INSERT INTO `users_permissions` (`user_id`, `permission`) VALUES (NEW.id, 'orders.update');
     INSERT INTO `users_permissions` (`user_id`, `permission`) VALUES (NEW.id, 'orders.delete');
+
+    INSERT INTO `users_permissions` (`user_id`, `permission`) VALUES (NEW.id, 'inventory.read');
 END$$
 DELIMITER ;
 

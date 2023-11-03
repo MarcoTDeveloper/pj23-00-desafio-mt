@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('America/Sao_Paulo');
-define('VERSION', '23.1.0');
+define('VERSION', '23.2.0');
 
 $url = isset($_GET['url']) ? $_GET['url'] : '';
 $url = explode('/', $url);

@@ -258,6 +258,17 @@ class API_configuration
         }
     }
 
+    public function validate_permissions(string $permissions)
+    {
+        $sql = 'SELECT `permission` FROM `users_permissions` WHERE `user_id` = ' . $this->user_id . ' AND `permission` = "' . $permissions . '" AND `status` = "true"';
+        $get_user_permissions = $this->db_read($sql);
+        if ($this->db_num_rows($get_user_permissions) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function generate_user_log(
         int $user_id,
         string $action,

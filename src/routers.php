@@ -52,6 +52,13 @@ if (isset($_GET['url'])) {
             $users = new Users();
 
             if (!isset($url[1])) { //read
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error read users or without permission'
+                    ]);
+                    exit;
+                }
                 $users->user_id = $user;
                 $response = $users->read(
                     (isset($_GET['position']) ? ['position' => addslashes($_GET['position'])] : [])
@@ -67,6 +74,13 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'create') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error create user or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $users->create(
                     addslashes($request->name),
                     addslashes($request->email),
@@ -89,6 +103,13 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'update') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error update user or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $users->update(
                     addslashes($request->id),
                     addslashes($request->name),
@@ -111,6 +132,13 @@ if (isset($_GET['url'])) {
                     echo json_encode(['This id does not exist or invalid URL']);
                 }
             } else if ($url[1] == 'delete') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error delete user or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $users->delete(
                     addslashes($url[2])
                 );
@@ -146,6 +174,14 @@ if (isset($_GET['url'])) {
             $products = new Products();
 
             if (!isset($url[1])) { //read
+                if (!$api->validate_permissions('products.read')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error read products or without permission'
+                    ]);
+                    exit;
+                }
+
                 $products->user_id = $user;
                 $response = $products->read(
                     (isset($_GET['position']) ? ['position' => addslashes($_GET['position'])] : [])
@@ -159,8 +195,19 @@ if (isset($_GET['url'])) {
                     echo json_encode($response);
                 } else {
                     http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error read products or without '
+                    ]);
                 }
             } else if ($url[1] == 'create') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error create products or without permission'
+                    ]);
+                    exit;
+                }
+
                 $response = $products->create(
                     addslashes($request->name),
                     addslashes($request->price)
@@ -177,8 +224,18 @@ if (isset($_GET['url'])) {
                     ]);
                 } else {
                     http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error creating product or without permission'
+                    ]);
                 }
             } else if ($url[1] == 'update') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error update product or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $products->update(
                     addslashes($request->id),
                     addslashes($request->name),
@@ -199,6 +256,13 @@ if (isset($_GET['url'])) {
                     echo json_encode(['This id does not exist or invalid URL']);
                 }
             } else if ($url[1] == 'delete') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error delete product or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $products->delete(
                     addslashes($url[2])
                 );
@@ -234,6 +298,13 @@ if (isset($_GET['url'])) {
             $orders = new Orders();
 
             if (!isset($url[1])) { //read
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error read orders or without permission'
+                    ]);
+                    exit;
+                }
                 $orders->user_id = $user;
                 $response = $orders->read(
                     (isset($_GET['position']) ? ['position' => addslashes($_GET['position'])] : [])
@@ -249,6 +320,13 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'create') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error create order or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $orders->create(
                     $user,
                     addslashes($request->product_id),
@@ -268,6 +346,13 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'update') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error update order or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $orders->update(
                     addslashes($request->id),
                     addslashes($request->product_id),
@@ -288,6 +373,13 @@ if (isset($_GET['url'])) {
                     echo json_encode(['This id does not exist or invalid URL']);
                 }
             } else if ($url[1] == 'delete') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error delete order or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $orders->delete(
                     addslashes($url[2])
                 );
@@ -323,6 +415,13 @@ if (isset($_GET['url'])) {
             $sales = new Sales();
 
             if (!isset($url[1])) { //read
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error read sales or without permission'
+                    ]);
+                    exit;
+                }
                 $sales->user_id = $user;
                 $response = $sales->read(
                     (isset($_GET['position']) ? ['position' => addslashes($_GET['position'])] : [])
@@ -338,6 +437,13 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'create') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error create sale or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $sales->create(
                     $user,
                     addslashes($request->client_name),
@@ -359,6 +465,13 @@ if (isset($_GET['url'])) {
                     echo json_encode($response);
                 }
             } else if ($url[1] == 'update') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error update sale or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $sales->update(
                     addslashes($request->id),
                     addslashes($request->client_name),
@@ -380,6 +493,13 @@ if (isset($_GET['url'])) {
                     echo json_encode(['This id does not exist or invalid URL']);
                 }
             } else if ($url[1] == 'delete') {
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error delete sale or without permission'
+                    ]);
+                    exit;
+                }
                 $response = $sales->delete(
                     addslashes($url[2])
                 );
@@ -415,6 +535,13 @@ if (isset($_GET['url'])) {
             $inventory = new Inventory();
 
             if (!isset($url[1])) { //read
+                if (!$api->validate_permissions('products.created')) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'message' => 'Error read inventory or without permission'
+                    ]);
+                    exit;
+                }
                 $inventory->user_id = $user;
                 $response = $inventory->read_inventory(
                     (isset($_GET['position']) ? ['position' => addslashes($_GET['position'])] : [])
