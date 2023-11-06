@@ -23,7 +23,7 @@ class Inventory extends API_configuration
             }
             return $inventory;
         } else {
-            return false;
+            return ['message' => 'No products in stock.'];
         }
     }
 
