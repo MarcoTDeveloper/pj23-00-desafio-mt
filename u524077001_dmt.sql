@@ -111,4 +111,6 @@ ALTER TABLE `orders` ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFE
 ALTER TABLE `orders` ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 ALTER TABLE `api_sessions` ADD CONSTRAINT `api_sessions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
-INSERT INTO `users` (`name`, `email`, `password`, `position`, `slug`) VALUES ("teste", "teste@sharpsolucoes.com", "$2y$12$4EF0zEKbVB4ZXWGLquI2T.Q0mtK2DGPuQoY93A1HXl5eX.HtKu6l2", "tester", "1-teste");
+INSERT INTO `users` (`name`, `email`, `password`, `position`, `slug`) VALUES ("suporte", "suporte@sharpsolucoes.com", "$2y$12$4EF0zEKbVB4ZXWGLquI2T.Q0mtK2DGPuQoY93A1HXl5eX.HtKu6l2", "suporte", "1-teste");
+
+UPDATE `users_permissions` SET `status` = 'true' WHERE `user_id` = '1';
