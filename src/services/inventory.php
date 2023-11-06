@@ -5,9 +5,7 @@ class Inventory extends API_configuration
 
     public function read_inventory()
     {
-        $sql = 'SELECT P.`id` AS `id`, P.`name` AS `name`, (COALESCE(SUM(O.`amount`), 0) - COALESCE(SUM(SP.`amount`), 0)) AS `amount`, P.`price` AS `unitary_value`, 
-    (P.`price` * (COALESCE(SUM(O.`amount`), 0) - COALESCE(SUM(SP.`amount`), 0))) AS `total_value` FROM `products` P LEFT JOIN `sales_products` SP ON P.`id` = SP.`product_id`
-    LEFT JOIN `orders` O ON P.`id` = O.`product_id` GROUP BY P.`id`, P.`name`, P.`price`';
+        $sql = 'SELECT P.`id` AS `id`, P.`name` AS `name`, (COALESCE(`order_amount`, 0) - COALESCE(`sales_product_amount`, 0)) AS `amount`, P.`price` AS `unitary_value`, P.`price` * (COALESCE(`order_amount`, 0) - COALESCE(`sales_product_amount`, 0)) AS `total_value` FROM `products` P LEFT JOIN (SELECT `product_id`, SUM(`amount`) AS `order_amount` FROM `orders` GROUP BY `product_id`) O ON P.`id` = O.`product_id` LEFT JOIN (SELECT `product_id`, SUM(`amount`) AS `sales_product_amount` FROM `sales_products` GROUP BY `product_id`) SP ON P.`id` = SP.`product_id`;';
         $get_inventory = $this->db_read($sql);
 
         if ($this->db_num_rows($get_inventory) > 0) {
@@ -30,7 +28,7 @@ class Inventory extends API_configuration
     public function read_stock_by_product_id(
         int $product_id
     ) {
-        $sql = 'SELECT P.`name` AS `name`, (COALESCE(SUM(O.`amount`), 0) - COALESCE(SUM(SP.`amount`), 0)) AS `amount` FROM `products` P LEFT JOIN `sales_products` SP ON P.`id` = SP.`product_id` LEFT JOIN `orders` O ON P.`id` = O.`product_id` WHERE P.`id` = ' . $product_id . ' GROUP BY p.id, p.name, p.price';
+        $sql = 'SELECT P.`name` AS `name`, (COALESCE(`order_amount`, 0) - COALESCE(`sales_product_amount`, 0)) AS `amount` FROM `products` P LEFT JOIN (SELECT `product_id`, SUM(`amount`) AS `order_amount` FROM `orders` GROUP BY `product_id`) O ON P.`id` = O.`product_id` LEFT JOIN (SELECT `product_id`, SUM(`amount`) AS `sales_product_amount` FROM `sales_products` GROUP BY `product_id`) SP ON P.`id` = SP.`product_id` WHERE P.`id` = ' . $product_id . '';
         $get_inventory = $this->db_read($sql);
         if ($this->db_num_rows($get_inventory) > 0) {
             $inventory = $this->db_object($get_inventory);
