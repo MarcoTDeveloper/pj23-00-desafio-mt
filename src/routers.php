@@ -52,7 +52,7 @@ if (isset($_GET['url'])) {
             $users = new Users();
 
             if (!isset($url[1])) { //read
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('users.read')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error read users or without permission'
@@ -74,7 +74,7 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'create') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('users.create')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error create user or without permission'
@@ -103,7 +103,7 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'update') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('users.update')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error update user or without permission'
@@ -132,7 +132,7 @@ if (isset($_GET['url'])) {
                     echo json_encode(['This id does not exist or invalid URL']);
                 }
             } else if ($url[1] == 'delete') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('users.delete')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error delete user or without permission'
@@ -200,7 +200,7 @@ if (isset($_GET['url'])) {
                     ]);
                 }
             } else if ($url[1] == 'create') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('products.create')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error create products or without permission'
@@ -229,7 +229,7 @@ if (isset($_GET['url'])) {
                     ]);
                 }
             } else if ($url[1] == 'update') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('products.update')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error update product or without permission'
@@ -256,7 +256,7 @@ if (isset($_GET['url'])) {
                     echo json_encode(['This id does not exist or invalid URL']);
                 }
             } else if ($url[1] == 'delete') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('products.delete')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error delete product or without permission'
@@ -298,7 +298,7 @@ if (isset($_GET['url'])) {
             $orders = new Orders();
 
             if (!isset($url[1])) { //read
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('orders.read')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error read orders or without permission'
@@ -320,7 +320,7 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'create') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('orders.create')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error create order or without permission'
@@ -346,7 +346,7 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'update') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('orders.update')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error update order or without permission'
@@ -373,7 +373,7 @@ if (isset($_GET['url'])) {
                     echo json_encode(['This id does not exist or invalid URL']);
                 }
             } else if ($url[1] == 'delete') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('orders.delete')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error delete order or without permission'
@@ -415,7 +415,7 @@ if (isset($_GET['url'])) {
             $sales = new Sales();
 
             if (!isset($url[1])) { //read
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('sales.read')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error read sales or without permission'
@@ -437,7 +437,7 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                 }
             } else if ($url[1] == 'create') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('sales.create')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error create sale or without permission'
@@ -465,7 +465,7 @@ if (isset($_GET['url'])) {
                     echo json_encode($response);
                 }
             } else if ($url[1] == 'update') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('sales.update')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error update sale or without permission'
@@ -493,7 +493,7 @@ if (isset($_GET['url'])) {
                     echo json_encode(['This id does not exist or invalid URL']);
                 }
             } else if ($url[1] == 'delete') {
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('sales.delete')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error delete sale or without permission'
@@ -535,7 +535,7 @@ if (isset($_GET['url'])) {
             $inventory = new Inventory();
 
             if (!isset($url[1])) { //read
-                if (!$api->validate_permissions('products.created')) {
+                if (!$api->validate_permissions('inventory.read')) {
                     http_response_code(400);
                     echo json_encode([
                         'message' => 'Error read inventory or without permission'
