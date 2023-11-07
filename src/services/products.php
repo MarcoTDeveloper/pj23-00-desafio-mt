@@ -9,7 +9,7 @@ class Products extends API_configuration
 
         $values = '
         "' . $name . '",
-        "' . $this->real_to_float($price) . '"
+        ' . $this->real_to_float($price) . '
         ';
 
         $sql = 'INSERT INTO `products` (`name`, `price`) VALUES (' . $values . ')';
@@ -72,7 +72,31 @@ class Products extends API_configuration
         if ($this->db_num_rows($get_products) > 0) {
             $products = $this->db_object($get_products);
             $products->id = (int) $products->id;
+            $products->price = (float) $products->price;
             return $products;
+        } else {
+            return [];
+        }
+    }
+
+    public function read_products_by_sale_id(
+        int $id
+    ) {
+        $sql = 'SELECT P.`id`, P.`name`, P.`price`, P.`slug`, SP.`amount` FROM `products` P, `sales_products` SP WHERE P.`id` = SP.`product_id` AND `sale_id` = ' . $id;
+        $get_products = $this->db_read($sql);
+        if ($this->db_num_rows($get_products) > 0) {
+            $response = [];
+            while ($products = $this->db_object($get_products)) {
+                $response[] = [
+                    'id' => (int) $products->id,
+                    'name' => $products->name,
+                    'price' => (float) $products->price,
+                    'amount' => (int) $products->amount,
+                    'total' => (float) $products->price * (int) $products->amount,
+                    'slug' => $products->slug
+                ];
+            }
+            return $response;
         } else {
             return [];
         }

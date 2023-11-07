@@ -14,9 +14,9 @@ class Inventory extends API_configuration
                 $inventory[] = [
                     'id' => (int) $inventory_object->id,
                     'name' => $inventory_object->name,
-                    'amount' => max(0, (int)$inventory_object->amount),
+                    'amount' => (int)$inventory_object->amount < 0 ? 0 : (int)$inventory_object->amount,
                     'unitary_value' => (float) $inventory_object->unitary_value,
-                    'total_value' =>  max(0, (float)$inventory_object->total_value)
+                    'total_value' =>  (float)$inventory_object->total_value < 0 ? 0 : (float)$inventory_object->total_value
                 ];
             }
             return $inventory;

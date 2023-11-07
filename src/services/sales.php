@@ -94,33 +94,12 @@ class Sales extends API_configuration
                     'date' => $sale_object->date,
                     'payment_methods' => $sale_object->payment_methods,
                     'slug' => $sale_object->slug,
-                    'products' => $this->read_products_by_id((int) $sale_object->id)
+                    'products' => $this->product->read_products_by_sale_id((int) $sale_object->id)
                 ];
             }
             return $sales;
         } else {
             return ['message' => 'No sales found'];
-        }
-    }
-
-    public function read_products_by_id(
-        int $id
-    ) {
-        $sql = 'SELECT P.`id`, P.`name`, P.`price`, P.`slug` FROM `products` P, `sales_products` SP WHERE P.`id` = SP.`product_id` AND `sale_id` = ' . $id;
-        $get_products = $this->db_read($sql);
-        if ($this->db_num_rows($get_products) > 0) {
-            $response = [];
-            while ($products = $this->db_object($get_products)) {
-                $response[] = [
-                    'id' => (int) $products->id,
-                    'name' => $products->name,
-                    'price' => (float) $products->price,
-                    'slug' => $products->slug
-                ];
-            }
-            return $response;
-        } else {
-            return [];
         }
     }
 
