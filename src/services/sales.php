@@ -19,10 +19,16 @@ class Sales extends API_configuration
         string $payment_methods
     ) {
         foreach ($products as $product) {
+            $amount = (int) $product->amount;
+
             $inventory = $this->inventory->read_stock_by_product_id($product->product_id);
             if ($inventory->amount <= 0) {
                 return [
                     'message' => 'Product ' . $inventory->name . ' is out of stock with id ' . $product->product_id
+                ];
+            } else if ($amount > $inventory->amount) {
+                return [
+                    'message' => 'Product ' . $inventory->name . ' has only ' . $inventory->amount . ' in stock'
                 ];
             }
         }
@@ -93,7 +99,7 @@ class Sales extends API_configuration
             }
             return $sales;
         } else {
-            return [];
+            return ['message' => 'No sales found'];
         }
     }
 
