@@ -92,7 +92,7 @@ class Products extends API_configuration
                     'name' => $products->name,
                     'price' => (float) $products->price,
                     'amount' => (int) $products->amount,
-                    'total' => (float) $products->price * (int) $products->amount,
+                    'total_value' => (float) $products->price * (int) $products->amount,
                     'slug' => $products->slug
                 ];
             }
