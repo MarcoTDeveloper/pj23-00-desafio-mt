@@ -225,11 +225,24 @@ class API_configuration
 
     protected function real_to_float($value)
     {
-        $num = str_replace('R$', '', $value);
-        $num = str_replace(' ', '', $num);
-        $num = str_replace('.', '', $num);
-        $num = str_replace(',', '.', $num);
-        return floatval($num);
+        if (str_contains($value, 'R$')) {
+            $value = str_replace('R$', '', $value);
+            $value = str_replace(' ', '', $value);
+            $value = str_replace('.', '', $value);
+            $value = str_replace(',', '.', $value);
+            return floatval($value);
+        } else if (str_contains($value, '.') && str_contains($value, ',')) {
+            $value = str_replace('.', '', $value);
+            $value = str_replace(',', '.', $value);
+            return floatval($value);
+        } else if (str_contains($value, '.') && !str_contains($value, ',')) {
+            return floatval($value);
+        } else if (str_contains($value, ',')) {
+            $value = str_replace(',', '.', $value);
+            return floatval($value);
+        } else {
+            return floatval($value);
+        }
     }
 
     public function authorization(string $type = "user")

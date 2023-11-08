@@ -50,15 +50,15 @@ class Orders extends API_configuration
         $get_orders = $this->db_read($sql);
         if ($this->db_num_rows($get_orders) > 0) {
             $orders = [];
-            while ($order_object = $this->db_object($get_orders)) {
+            while ($order = $this->db_object($get_orders)) {
                 $orders[] = [
-                    'id' => (int) $order_object->id,
-                    'user_id' => (int) $order_object->user_id,
-                    'product_id' => (int) $order_object->product_id,
-                    'date' => $order_object->date,
-                    'amount' => (int) $order_object->amount,
-                    'slug' => $order_object->slug,
-                    'product' => $this->product->read_by_id((int) $order_object->product_id)
+                    'id' => (int) $order->id,
+                    'user_id' => (int) $order->user_id,
+                    'product_id' => (int) $order->product_id,
+                    'date' => $order->date,
+                    'amount' => (int) $order->amount,
+                    'slug' => $order->slug,
+                    'product' => $this->product->read_by_id((int) $order->product_id)
                 ];
             }
             return $orders;

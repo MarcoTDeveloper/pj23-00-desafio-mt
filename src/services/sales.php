@@ -82,19 +82,33 @@ class Sales extends API_configuration
 
     public function read()
     {
-        $sql = 'SELECT S.`id`, S.`user_id`, S.`client_name`, S.`date`, S.`payment_methods`, S.`slug` FROM `sales` S;';
+        $sql = 'SELECT `id`, `user_id`, `client_name`, `date`, `payment_methods`, `slug` FROM `sales`';
         $get_sales = $this->db_read($sql);
         if ($this->db_num_rows($get_sales) > 0) {
+
+            $sales_product = [];
+            $sql = 'SELECT `product_id` AS `product` FROM `sales_products` SP, `sales` S WHERE `sale_id` = S.`id`';
+            $get_sales_products = $this->db_read($sql);
+            if ($this->db_num_rows($get_sales_products) > 0) {
+
+                while ($sales_products = $this->db_object($get_sales_products)) {
+                    $sales_product[] = [
+                        'product' => (int) $sales_products->product,
+                        // 'amount' => (int) $sales_products->amount
+                    ];
+                }
+            }
+
             $sales = [];
-            while ($sale_object = $this->db_object($get_sales)) {
+            while ($sale = $this->db_object($get_sales)) {
                 $sales[] = [
-                    'id' => (int) $sale_object->id,
-                    'user_id' => (int) $sale_object->user_id,
-                    'client_name' => $sale_object->client_name,
-                    'date' => $sale_object->date,
-                    'payment_methods' => $sale_object->payment_methods,
-                    'slug' => $sale_object->slug,
-                    'products' => $this->product->read_products_by_sale_id((int) $sale_object->id)
+                    'id' => (int) $sale->id,
+                    'user_id' => (int) $sale->user_id,
+                    'client_name' => $sale->client_name,
+                    'date' => $sale->date,
+                    'payment_methods' => $sale->payment_methods,
+                    'slug' => $sale->slug,
+                    'products' => $sales_products
                 ];
             }
             return $sales;
