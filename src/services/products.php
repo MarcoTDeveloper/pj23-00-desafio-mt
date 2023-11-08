@@ -87,12 +87,13 @@ class Products extends API_configuration
         if ($this->db_num_rows($get_products) > 0) {
             $response = [];
             while ($products = $this->db_object($get_products)) {
+                $total_value = (float) $products->price * (int) $products->amount;
                 $response[] = [
                     'id' => (int) $products->id,
                     'name' => $products->name,
                     'price' => (float) $products->price,
                     'amount' => (int) $products->amount,
-                    'total_value' => (float) $products->price * (int) $products->amount,
+                    'total_value' => (float) number_format($total_value, 2, '.', ''),
                     'slug' => $products->slug
                 ];
             }
