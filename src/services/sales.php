@@ -86,21 +86,22 @@ class Sales extends API_configuration
         $get_sales = $this->db_read($sql);
         if ($this->db_num_rows($get_sales) > 0) {
 
-            $sales_product = [];
-            $sql = 'SELECT `product_id` AS `product` FROM `sales_products` SP, `sales` S WHERE `sale_id` = S.`id`';
-            $get_sales_products = $this->db_read($sql);
-            if ($this->db_num_rows($get_sales_products) > 0) {
-
-                while ($sales_products = $this->db_object($get_sales_products)) {
-                    $sales_product[] = [
-                        'product' => (int) $sales_products->product,
-                        // 'amount' => (int) $sales_products->amount
-                    ];
-                }
-            }
-
             $sales = [];
             while ($sale = $this->db_object($get_sales)) {
+
+                $sales_products = [];
+                $sql = 'SELECT `product_id`, `amount` FROM `sales_products` WHERE `sale_id` = ' . $sale->id . '';
+                $get_sales_products = $this->db_read($sql);
+                while ($sale_product = $this->db_object($get_sales_products)) {
+                    $product = $this->product->read_by_id($sale_product->product_id);
+                    $product->amount = (float) $sale_product->amount;
+                    $product->total_value = (float) number_format($sale_product->amount * $product->price, 2, '.', '');
+
+
+                    unset($product->slug);
+                    array_push($sales_products, $product);
+                }
+
                 $sales[] = [
                     'id' => (int) $sale->id,
                     'user_id' => (int) $sale->user_id,

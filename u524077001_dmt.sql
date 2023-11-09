@@ -79,7 +79,7 @@ CREATE TABLE `sales_products` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `sale_id` int(11) NOT NULL,
     `product_id` int(11) NOT NULL,
-    `amount` int(11) NOT NULL,
+    `amount` float NOT NULL,
     PRIMARY KEY (`id`)
 );
 
@@ -88,7 +88,7 @@ CREATE TABLE `orders` (
     `user_id` int(11) NOT NULL,
     `product_id` int(11) NOT NULL,
     `date` datetime NOT NULL,
-    `amount` int(11) NOT NULL,
+    `amount` float NOT NULL,
     `slug` varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
 );
