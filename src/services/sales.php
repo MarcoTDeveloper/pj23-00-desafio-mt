@@ -97,7 +97,6 @@ class Sales extends API_configuration
                     $product->amount = (float) $sale_product->amount;
                     $product->total_value = (float) number_format($sale_product->amount * $product->price, 2, '.', '');
 
-
                     unset($product->slug);
                     array_push($sales_products, $product);
                 }
