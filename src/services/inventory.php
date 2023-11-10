@@ -10,13 +10,13 @@ class Inventory extends API_configuration
 
         if ($this->db_num_rows($get_inventory) > 0) {
             $inventory = [];
-            while ($inventory = $this->db_object($get_inventory)) {
+            while ($inventory_info = $this->db_object($get_inventory)) {
                 $inventory[] = [
-                    'id' => (int) $inventory->id,
-                    'name' => $inventory->name,
-                    'amount' => (int)$inventory->amount < 0 ? 0 : (int)$inventory->amount,
-                    'unitary_value' => (float) $inventory->unitary_value,
-                    'total_value' =>  (float)$inventory->total_value < 0 ? 0 : (float)$inventory->total_value
+                    'id' => (int) $inventory_info->id,
+                    'name' => $inventory_info->name,
+                    'amount' => (int)$inventory_info->amount < 0 ? 0 : (int)$inventory_info->amount,
+                    'unitary_value' => (float) $inventory_info->unitary_value,
+                    'total_value' => (float) number_format((float)$inventory_info->total_value < 0 ? 0 : (float)$inventory_info->total_value,  2, '.', '')
                 ];
             }
             return $inventory;

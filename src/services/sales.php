@@ -82,13 +82,53 @@ class Sales extends API_configuration
 
     public function read()
     {
-        $sql = 'SELECT `id`, `user_id`, `client_name`, `date`, `payment_methods`, `slug` FROM `sales`';
+        $sql = 'SELECT `id`, `user_id`, `client_name`, `date`, `payment_methods`, `slug`, `status` FROM `sales`';
         $get_sales = $this->db_read($sql);
         if ($this->db_num_rows($get_sales) > 0) {
+            if ($get_sales == 'false') {
+                return false;
+            } else {
+                $sales = [];
+                while ($sale = $this->db_object($get_sales)) {
 
+                    $sales_products = [];
+                    $sql = 'SELECT `product_id`, `amount` FROM `sales_products` WHERE `sale_id` = ' . $sale->id . '';
+                    $get_sales_products = $this->db_read($sql);
+                    while ($sale_product = $this->db_object($get_sales_products)) {
+                        $product = $this->product->read_by_id($sale_product->product_id);
+                        $product->amount = (float) $sale_product->amount;
+                        $product->total_value = (float) number_format($sale_product->amount * $product->price, 2, '.', '');
+
+                        unset($product->slug);
+                        array_push($sales_products, $product);
+                    }
+
+                    $sales[] = [
+                        'id' => (int) $sale->id,
+                        'user_id' => (int) $sale->user_id,
+                        'client_name' => $sale->client_name,
+                        'date' => $sale->date,
+                        'payment_methods' => $sale->payment_methods,
+                        'slug' => $sale->slug,
+                        'status' => $sale->status,
+                        'products' => $sales_products
+                    ];
+                }
+                return $sales;
+            }
+        } else {
+            return ['message' => 'No sales found'];
+        }
+    }
+
+    public function read_by_slug(
+        string $slug
+    ) {
+        $sql = 'SELECT `id`, `user_id`, `client_name`, `date`, `payment_methods`, `slug`, `status` FROM `sales` WHERE `slug` = "' . $slug . '"';
+        $get_sale = $this->db_read($sql);
+        if ($this->db_num_rows($get_sale) > 0) {
             $sales = [];
-            while ($sale = $this->db_object($get_sales)) {
-
+            while ($sale = $this->db_object($get_sale)) {
                 $sales_products = [];
                 $sql = 'SELECT `product_id`, `amount` FROM `sales_products` WHERE `sale_id` = ' . $sale->id . '';
                 $get_sales_products = $this->db_read($sql);
@@ -108,23 +148,10 @@ class Sales extends API_configuration
                     'date' => $sale->date,
                     'payment_methods' => $sale->payment_methods,
                     'slug' => $sale->slug,
+                    'status' => $sale->status,
                     'products' => $sales_products
                 ];
             }
-            return $sales;
-        } else {
-            return ['message' => 'No sales found'];
-        }
-    }
-
-    public function read_by_slug(
-        string $slug
-    ) {
-        $sql = 'SELECT `id`, `user_id`, `client_name`, `date`, `payment_methods`, `slug` FROM `sales` WHERE `slug` = "' . $slug . '"';
-        $get_sales = $this->db_read($sql);
-        if ($this->db_num_rows($get_sales) > 0) {
-            $sales = $this->db_object($get_sales);
-            $sales->id = (int) $sales->id;
             return $sales;
         } else {
             return [];
@@ -145,58 +172,13 @@ class Sales extends API_configuration
         }
     }
 
-    public function update(
-        int $id,
-        string $client_name,
-        string $payment_methods,
-        array $products
-    ) {
-
-        foreach ($products as $product) {
-            $inventory = $this->inventory->read_stock_by_product_id($product->product_id);
-            if ($inventory->amount <= 0) {
-                return [
-                    'message' => 'Product ' . $inventory->name . ' is out of stock with id ' . $product->product_id
-                ];
-            }
-        }
-
-        $old_sale = $this->read_by_id($id);
-        if ($old_sale) {
-            $sql = 'UPDATE `sales` SET `client_name` = "' . $client_name . '" , `payment_methods` = "' . $payment_methods . '" , `slug` = "' . $this->slugify($id . '-' . $client_name) . '"  WHERE `id` = "' . $id .  '"';
-            if ($this->db_update($sql)) {
-
-                $delete_sale = 'DELETE FROM `sales_products` WHERE `sale_id` = "' . $id . '"';
-                $this->db_delete($delete_sale);
-
-                foreach ($products as $product) {
-                    $this->create_sales_products($id, $product->product_id, $product->amount);
-                }
-                return [
-                    'old_sale' => $old_sale,
-                    'new_sale' => [
-                        'id' => (int) $id,
-                        'client_name' => $client_name,
-                        'payment_methods' => $payment_methods,
-                        'slug' => $this->slugify($id . '-' . $client_name),
-                        'products' => $products
-                    ]
-                ];
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public function delete(
+    public function cancel_sale(
         string $slug
     ) {
         $old_sale = $this->read_by_slug($slug);
         if ($old_sale) {
-            $sql = 'DELETE FROM `sales` WHERE `slug` = "' . $slug . '"';
-            if ($this->db_delete($sql)) {
+            $sql = 'UPDATE `sales` SET `status` = "false" WHERE `slug` = "' . $slug . '"';
+            if ($this->db_update($sql)) {
                 return [
                     'old_sale' => $old_sale
                 ];

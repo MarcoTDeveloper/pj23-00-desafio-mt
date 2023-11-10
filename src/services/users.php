@@ -56,13 +56,13 @@ class Users extends Api_configuration
         $get_users = $this->db_read($sql);
         if ($this->db_num_rows($get_users) > 0) {
             $users = [];
-            while ($users = $this->db_object($get_users)) {
+            while ($user = $this->db_object($get_users)) {
                 $users[] = [
-                    'id' => (int) $users->id,
-                    'name' => $users->name,
-                    'email' => $users->email,
-                    'position' => $users->position,
-                    'slug' => $users->slug
+                    'id' => (int) $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'position' => $user->position,
+                    'slug' => $user->slug
                 ];
             }
             return $users;

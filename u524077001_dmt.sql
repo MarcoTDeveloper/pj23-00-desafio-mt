@@ -72,6 +72,7 @@ CREATE TABLE `sales` (
     `date` datetime NOT NULL,
     `payment_methods` varchar(255) NOT NULL,
     `slug` varchar(255) NOT NULL,
+    `status` varchar(5) NOT NULL DEFAULT 'true',
     PRIMARY KEY (`id`)
 );
 

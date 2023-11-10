@@ -464,52 +464,27 @@ if (isset($_GET['url'])) {
                     http_response_code(400);
                     echo json_encode($response);
                 }
-            } else if ($url[1] == 'update') {
-                if (!$api->validate_permissions('sales.update')) {
-                    http_response_code(400);
-                    echo json_encode([
-                        'message' => 'Error update sale or without permission'
-                    ]);
-                    exit;
-                }
-                $response = $sales->update(
-                    addslashes($request->id),
-                    addslashes($request->client_name),
-                    addslashes($request->payment_methods),
-                    (array)($request->products)
-                );
-                if ($response && array_keys($response)[0] != 'message') {
-                    $api->generate_user_log(
-                        $api->user_id,
-                        'sales.update',
-                        json_encode($response)
-                    );
-                    http_response_code(200);
-                    echo json_encode([
-                        'message' => 'Sale updated'
-                    ]);
-                } else {
-                    http_response_code(400);
-                    echo json_encode(['This id does not exist or invalid URL']);
-                }
-            } else if ($url[1] == 'delete') {
+            } else if ($url[1] == 'cancel_sale') {
                 if (!$api->validate_permissions('sales.delete')) {
                     http_response_code(400);
                     echo json_encode([
-                        'message' => 'Error delete sale or without permission'
+                        'message' => 'Error cancel sale or without permission'
                     ]);
                     exit;
                 }
-                $response = $sales->delete(
+                $response = $sales->cancel_sale(
                     addslashes($url[2])
                 );
                 if ($response) {
                     $api->generate_user_log(
                         $api->user_id,
-                        'sales.delete',
+                        'sales.cancel',
                         json_encode($response)
                     );
-                    http_response_code(204);
+                    http_response_code(200);
+                    echo json_encode([
+                        'message' => 'Canceled Sale'
+                    ]);
                 } else {
                     http_response_code(400);
                 }
@@ -527,7 +502,9 @@ if (isset($_GET['url'])) {
                     echo json_encode($response);
                 } else {
                     http_response_code(400);
-                    echo json_encode(['message' => 'Invalid URL or sale not found']);
+                    echo json_encode([
+                        'message' => 'Invalid URL or sale not found'
+                    ]);
                 }
             }
         } else if ($url[0] == 'inventory') {
