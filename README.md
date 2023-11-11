@@ -39,7 +39,7 @@
                 
                 {
                 "user": {
-                		"id": int,
+                		"id": "int(11)",
                 		"name": "varchar(255)",
                 		"position": "varchar(255)",
                 		"avatar": "varchar(255)",
