@@ -12,7 +12,8 @@
 
 - **Como utilizar a API em sua maquina:**
 
-  Se preferir pode se orientar pelo [Notion](https://www.notion.so/pt-br) clicando aqui -> [Orientação Notion](https://www.notion.so/API-pj23-00-desafio-mt-1b65de5171eb45ee83e87a1695fef60b?pvs=4)
+    Se preferir pode se orientar pelo [Notion](https://www.notion.so/pt-br) clicando aqui -> [Orientação Notion](https://www.notion.so/API-pj23-00-desafio-mt-1b65de5171eb45ee83e87a1695fef60b?pvs=4).
+
     - **Pré-requisitos:**
         - **Ter o xampp.**
         - **Ter o insomnia.**
@@ -38,7 +39,7 @@
                 
                 {
                 "user": {
-                		"id": "int(11)",
+                		"id": int,
                 		"name": "varchar(255)",
                 		"position": "varchar(255)",
                 		"avatar": "varchar(255)",
@@ -113,6 +114,9 @@
                 			"create": "boolean",
                 			"update": "boolean",
                 			"delete": "boolean"
+                		},
+                		"inventory": {
+                			"read": "boolean"
                 		}
                 }
                 }
@@ -343,7 +347,6 @@
                 
                 ```json
                 {
-                	"user_id" : "int(11)",
                 	"product_id" : "int(11)",
                 	"amount" : "int(11)"
                 }
@@ -450,7 +453,6 @@
                 
                 ```json
                 {
-                	"user_id" : "int(11)",
                 	"client_name" : "varchar(255)",
                 	"payment_methods" : "varchar(255)",
                 	"products" : [
@@ -511,43 +513,8 @@
                 []
                 ```
                 
-            - Atualizar vendas
-                - Rota: /sales/update
-                - Metodo: PUT
-                - Headers**:** token de acesso da API
-                
-                ```json
-                {
-                	"id" : "int(11)",
-                	"client_name" : "varchar(255)",
-                	"payment_methods" : "varchar(255)",
-                	"products" : [
-                		{
-                			"product_id": "int(11)",
-                			"amount" : "int(11)"
-                		}
-                	]
-                }
-                ```
-                
-                - Respostas da requisição:
-                
-                ```json
-                //Sucesso - Status 200 OK
-                
-                [
-                "User updated"
-                ]
-                
-                //Erro - Status 400 Bad Request
-                
-                [
-                "This id does not exist or invalid URL"
-                ] 
-                ```
-                
-            - Deletar vendas
-                - Rota: sales/delete/0-slug-venda (voçê escolhe a venda que será apagada pela slug)
+            - Cancelar vendas
+                - Rota: sales/cancel_sale/0-slug-venda (voçê escolhe a venda que será apagada pela slug)
                 - Metodo: DELETE
                 - Headers**:** token de acesso da API
                 - Respostas da requisição:
@@ -555,7 +522,7 @@
                 ```json
                 //Sucesso Status - 204 No Content
                 
-                []
+                ["message": "Canceled Sale"]
                 
                 //Erro Status - 400 Bad Request
                 
